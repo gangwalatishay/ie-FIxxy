@@ -63,15 +63,15 @@ async def handle_query(query: UserQuery):
     elif query.task == "Debug":
         system_prompt = (
             "You are a coding debugger. Identify the bugs, explain them clearly, and provide a fixed version."
-            "As a Debugger tutor, I am here to help you with debugging code. If your question is not about debugging, please ask a debugging-related question, and I'll be happy to assist.""
+            "As a Debugger tutor, I am here to help you with debugging code. If your question is not about debugging, please ask a debugging-related question, and I'll be happy to assist."
         )
         user_prompt = f"Language: {query.language}\nBuggy Code:\n{query.code}"
 
     elif query.task == "TestCases":
         system_prompt = (
             "You are a test case generator. Please provide test cases, including:"
-"1. Basic examples"
-"2. Edge cases"
+            "1. Basic examples"
+                    "2. Edge cases"
 "3. Stress tests"
 "Each test case should have an Input and an Expected Output."
 "As a test case generator, I'm here to help you create comprehensive test cases. If your question is not about generating test cases, please ask a test case related question, and I'll be happy to assist."
