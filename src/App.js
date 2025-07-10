@@ -24,45 +24,6 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
-    const cursor = document.querySelector(".custom-cursor");
-    const moveCursor = (e) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
-    };
-    const shrinkOnClick = () => {
-      cursor.classList.add("clicking");
-      setTimeout(() => cursor.classList.remove("clicking"), 400);
-    };
-    const fadeCursor = () => {
-      cursor.style.opacity = "1";
-      clearTimeout(cursor._idleTimer);
-      cursor._idleTimer = setTimeout(() => {
-        cursor.style.opacity = "0";
-      }, 3000);
-    };
-    const expandOnHover = (e) => {
-      if (["BUTTON", "A", "INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) {
-        cursor.classList.add("hovering");
-      }
-    };
-    const shrinkOnLeave = () => {
-      cursor.classList.remove("hovering");
-    };
-    window.addEventListener("mousemove", moveCursor);
-    window.addEventListener("mousemove", fadeCursor);
-    window.addEventListener("mousedown", shrinkOnClick);
-    window.addEventListener("mouseover", expandOnHover);
-    window.addEventListener("mouseout", shrinkOnLeave);
-    return () => {
-      window.removeEventListener("mousemove", moveCursor);
-      window.removeEventListener("mousemove", fadeCursor);
-      window.removeEventListener("mousedown", shrinkOnClick);
-      window.removeEventListener("mouseover", expandOnHover);
-      window.removeEventListener("mouseout", shrinkOnLeave);
-    };
-  }, []);
-
-  useEffect(() => {
     if (selectedSet === "Ravi 251") setQuestions(ravi251);
     else if (selectedSet === "Ravi 400") setQuestions(ravi400);
     else setQuestions(ravi111);
@@ -88,7 +49,12 @@ function App() {
       const res = await fetch("https://ie-fixxy-1.onrender.com/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ task, question: selectedQuestion[task], language, code: code[task] }),
+        body: JSON.stringify({
+          task,
+          question: selectedQuestion[task],
+          language,
+          code: code[task],
+        }),
       });
       const data = await res.json();
       setChat((prev) => ({
@@ -123,41 +89,56 @@ function App() {
   return (
     <div className={`app-layout ${theme}`} data-theme={theme}>
       <div className="custom-cursor" />
-      <aside className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}>
-        <h2>Ravi DSA Sheets</h2>
-        <div className="ravi-sets">
-          {["Ravi 251", "Ravi 400", "Ravi 111"].map((set) => (
-            <button
-              key={set}
-              className={`ravi-set-btn ${selectedSet === set ? "selected" : ""}`}
-              onClick={() => setSelectedSet(set)}
-            >
-              {set}
-            </button>
-          ))}
-        </div>
-        <input
-          type="text"
-          placeholder="Search questions..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="search-input"
-        />
-        <ul className="question-list">
-          {filteredQuestions.map((q) => (
-            <li
-              key={q}
-              className={q === selectedQuestion[task] ? "selected" : ""}
-              onClick={() => {
-                setSelectedQuestion((prev) => ({ ...prev, [task]: q }));
-                setCode((prev) => ({ ...prev, [task]: "" }));
-              }}
-            >
-              {q}
-            </li>
-          ))}
-        </ul>
+      <aside
+        className={`sidebar ${isSidebarOpen ? "open" : "closed"}`}
+        style={{
+          overflowY: "auto",
+          maxHeight: "100vh",
+          width: isSidebarOpen ? "250px" : "0",
+          transition: "width 0.3s ease",
+          padding: isSidebarOpen ? "1rem" : "0",
+          borderRight: isSidebarOpen ? "1px solid #ccc" : "none",
+        }}
+      >
+        {isSidebarOpen && (
+          <>
+            <h2>Ravi DSA Sheets</h2>
+            <div className="ravi-sets">
+              {["Ravi 251", "Ravi 400", "Ravi 111"].map((set) => (
+                <button
+                  key={set}
+                  className={`ravi-set-btn ${selectedSet === set ? "selected" : ""}`}
+                  onClick={() => setSelectedSet(set)}
+                >
+                  {set}
+                </button>
+              ))}
+            </div>
+            <input
+              type="text"
+              placeholder="Search questions..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+            <ul className="question-list">
+              {filteredQuestions.map((q) => (
+                <li
+                  key={q}
+                  className={q === selectedQuestion[task] ? "selected" : ""}
+                  onClick={() => {
+                    setSelectedQuestion((prev) => ({ ...prev, [task]: q }));
+                    setCode((prev) => ({ ...prev, [task]: "" }));
+                  }}
+                >
+                  {q}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </aside>
+
       <main className="container">
         <header className="header">
           <button className="hamburger" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>☰</button>
@@ -170,19 +151,22 @@ function App() {
                 ))}
               </select>
             </label>
-            <label>
-              Language:
-              <select value={language} onChange={(e) => setLanguage(e.target.value)}>
-                {languageOptions.map((lang) => (
-                  <option key={lang}>{lang}</option>
-                ))}
-              </select>
-            </label>
+            {task !== "Explain" && (
+              <label>
+                Language:
+                <select value={language} onChange={(e) => setLanguage(e.target.value)}>
+                  {languageOptions.map((lang) => (
+                    <option key={lang}>{lang}</option>
+                  ))}
+                </select>
+              </label>
+            )}
           </div>
           <button onClick={toggleTheme} className="dark-toggle-btn">
             {theme === "light" ? "Dark Mode" : "Light Mode"}
           </button>
         </header>
+
         {task !== "Debug" && (
           <section className="question-entry">
             <label htmlFor="custom-question">Type your DSA question:</label>
@@ -195,6 +179,7 @@ function App() {
             />
           </section>
         )}
+
         {task === "Debug" && (
           <section className="debug-section">
             <label>Paste your code:</label>
@@ -206,8 +191,9 @@ function App() {
             />
           </section>
         )}
+
         <section className="chat-section">
-          <div className="chat-window">
+          <div className="chat-window" style={{ maxHeight: "60vh", overflowY: "auto" }}>
             {chat[task].map((msg, idx) => (
               <div
                 key={idx}
