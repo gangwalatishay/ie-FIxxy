@@ -1,4 +1,3 @@
-// App.js
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
@@ -24,6 +23,48 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   useEffect(() => {
+    // Cursor setup
+    const cursor = document.querySelector(".custom-cursor");
+    const moveCursor = (e) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    };
+    const shrinkOnClick = () => {
+      cursor.classList.add("clicking");
+      setTimeout(() => cursor.classList.remove("clicking"), 400);
+    };
+    const fadeCursor = () => {
+      cursor.style.opacity = "1";
+      clearTimeout(cursor._idleTimer);
+      cursor._idleTimer = setTimeout(() => {
+        cursor.style.opacity = "0";
+      }, 3000);
+    };
+    const expandOnHover = (e) => {
+      if (["BUTTON", "A", "INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName)) {
+        cursor.classList.add("hovering");
+      }
+    };
+    const shrinkOnLeave = () => {
+      cursor.classList.remove("hovering");
+    };
+
+    window.addEventListener("mousemove", moveCursor);
+    window.addEventListener("mousemove", fadeCursor);
+    window.addEventListener("mousedown", shrinkOnClick);
+    window.addEventListener("mouseover", expandOnHover);
+    window.addEventListener("mouseout", shrinkOnLeave);
+
+    return () => {
+      window.removeEventListener("mousemove", moveCursor);
+      window.removeEventListener("mousemove", fadeCursor);
+      window.removeEventListener("mousedown", shrinkOnClick);
+      window.removeEventListener("mouseover", expandOnHover);
+      window.removeEventListener("mouseout", shrinkOnLeave);
+    };
+  }, []);
+
+  useEffect(() => {
     if (selectedSet === "Ravi 251") setQuestions(ravi251);
     else if (selectedSet === "Ravi 400") setQuestions(ravi400);
     else setQuestions(ravi111);
@@ -40,10 +81,12 @@ function App() {
       alert("Please select a question from sheet or enter a DSA question.");
       return;
     }
+
     setChat((prev) => ({
       ...prev,
       [task]: [...prev[task], { from: "user", text: currentInput, language, task }],
     }));
+
     setLoading(true);
     try {
       const res = await fetch("https://ie-fixxy-1.onrender.com/ask", {
@@ -95,7 +138,7 @@ function App() {
           overflowY: "auto",
           maxHeight: "100vh",
           width: isSidebarOpen ? "250px" : "0",
-          transition: "width 0.3s ease",
+          transition: "width 0.3s ease, padding 0.3s ease",
           padding: isSidebarOpen ? "1rem" : "0",
           borderRight: isSidebarOpen ? "1px solid #ccc" : "none",
         }}
