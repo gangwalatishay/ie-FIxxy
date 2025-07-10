@@ -85,7 +85,7 @@ function App() {
     }));
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/ask", {
+      const res = await fetch("https://ie-fixxy-1.onrender.com/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ task, question: selectedQuestion[task], language, code: code[task] }),
