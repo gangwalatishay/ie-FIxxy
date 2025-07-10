@@ -1,38 +1,672 @@
-.App {
-  text-align: center;
+html, body, * {
+  cursor: none !important;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+input, textarea, select {
+  cursor: text !important;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+button, a {
+  cursor: none !important;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+:root {
+  --bg: #ccd0cf;
+  --text: #06141B;
+  --input-border: #9ba8ab;
+  --highlight: #4a5c6a;
+  --msg-bg: #ffffff;
+  --user-bg: #9ba8ab;
+  --bot-bg: #e6ebee;
+  --sidebar-bg: #d6dde2;
+
+  --shadow: rgba(0, 0, 0, 0.1);
+  --gradient: linear-gradient(135deg, #ccd0cf, #ffffff);
+}
+
+[data-theme="dark"] {
+  --bg: #06141b;
+  --text: #f4f4f4;
+  --input-border: #4a5c6a;
+  --highlight: #9ba8ab;
+  --msg-bg: #11212d;
+  --user-bg: #253745;
+  --bot-bg: #4a5c6a;
+  --sidebar-bg: #11212d;
+
+  --shadow: rgba(0, 0, 0, 0.4);
+  --gradient: linear-gradient(135deg, #11212d, #06141b);
+}
+
+body, html, #root {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Fira Code', monospace;
+  transition: background 0.3s, color 0.3s;
+}
+
+
+.app-layout {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: var(--sidebar-bg);
+  padding: 1rem;
+  overflow-y: auto;
+  backdrop-filter: blur(6px);
+  background-image: var(--gradient);
+  border-right: 1px solid var(--input-border);
+  box-shadow: 2px 0 10px var(--shadow);
+  transition: background 0.3s;
+}
+
+.sidebar h2 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.ravi-set-btn {
+  background: transparent;
+  border: 1px solid var(--input-border);
+  margin-bottom: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text);
+}
+
+.ravi-set-btn:hover {
+  background: var(--highlight);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.ravi-set-btn.selected {
+  background: var(--highlight);
+  color: white;
+  font-weight: bold;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.search-input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--msg-bg);
+  color: var(--text);
+}
+
+.question-list {
+  list-style: none;
+  margin-top: 1rem;
+  padding-left: 0;
+}
+
+.question-list li {
+  padding: 0.4rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+  color: var(--text);
+}
+
+.question-list li:hover,
+.question-list li.selected {
+  background: var(--highlight);
+  color: white;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--msg-bg), #f0f4f8);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.controls select {
+  margin-top: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid var(--input-border);
+  background: var(--msg-bg);
+  color: var(--text);
+  font-family: 'Fira Code', monospace;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.controls select:hover,
+.controls select:focus {
+  border-color: var(--highlight);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(100, 120, 150, 0.2);
+}
+
+.dark-toggle-btn {
+  background: var(--highlight);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.dark-toggle-btn:hover {
+  background: #3c4d58;
+}
+
+.question-entry,
+.debug-section {
+  margin-top: 1rem;
+}
+
+textarea {
+  width: 100%;
+  font-family: 'Fira Code', monospace;
+  padding: 0.8rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--msg-bg);
+  color: var(--text);
+  resize: vertical;
+  box-shadow: 0 1px 4px var(--shadow);
+  transition: background 0.3s;
+}
+
+.chat-section {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.chat-window {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+  padding-right: 1rem;
+}
+
+.chat-message {
+  margin-bottom: 1rem;
+  max-width: 90%;
+  box-shadow: 0 1px 4px var(--shadow);
+  padding: 0.8rem;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.user-msg {
+  background: var(--user-bg);
+  align-self: flex-end;
+  color: #ffffff;
+}
+
+.bot-msg {
+  background: var(--bot-bg);
+  align-self: flex-start;
+  color: #f1f5f9;
+}
+
+.msg-task {
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  opacity: 0.8;
+  color: var(--text);
+}
+
+.msg-text {
+  font-family: 'Fira Code', monospace;
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.6;
+  animation: fadeIn 0.4s ease-in;
+  color: var(--text);
+}
+
+.msg-text code {
+  display: block;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 6px;
+  border-radius: 4px;
+  margin-top: 0.5rem;
+  white-space: pre;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  font-family: 'Fira Code', monospace;
+  color: var(--text);
+}
+
+.button-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.submit-btn,
+.clear-btn,
+.reset-btn,
+.info-btn {
+  padding: 0.6rem 1.2rem;
+  background: var(--highlight);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.submit-btn:hover,
+.clear-btn:hover,
+.reset-btn:hover,
+.info-btn:hover {
+  background: #3c4d58;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* === Animations === */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === Sidebar Button Hover === */
+.ravi-set-btn {
+  background: transparent;
+  border: 1px solid var(--input-border);
+  margin-bottom: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.3s ease, transform 0.2s ease;
+  color: var(--text);
+}
+
+.ravi-set-btn:hover {
+  background: var(--highlight);
+  color: white;
+  transform: translateX(4px) scale(1.02);
+}
+
+/* === Chat Message Animation === */
+.user-msg {
+  background: var(--user-bg);
+  align-self: flex-end;
+  color: #ffffff;
+  animation: slideInRight 0.3s ease-out;
+}
+
+.bot-msg {
+  background: var(--bot-bg);
+  align-self: flex-start;
+  color: #f1f5f9;
+  animation: slideInLeft 0.3s ease-out;
+}
+
+/* === Input Focus Effects === */
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: 0 0 0 3px rgba(100, 150, 200, 0.25);
+  transform: scale(1.01);
+  transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+/* === Dark Mode Toggle Animation === */
+.dark-toggle-btn {
+  background: var(--highlight);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s ease;
+}
+
+.dark-toggle-btn:hover {
+  background: #3c4d58;
+  transform: rotate(5deg) scale(1.05);
+}
+
+/* === Control Panel Float-In === */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--msg-bg), #f0f4f8);
+  box-shadow: 0 4px 12px var(--shadow);
+  animation: floatIn 0.4s ease;
+}
+
+/* === Button Click Effect === */
+.submit-btn:active,
+.clear-btn:active,
+.reset-btn:active,
+.info-btn:active {
+  transform: scale(0.97);
+}
+
+/* Keep the existing hover effect for buttons */
+.submit-btn:hover,
+.clear-btn:hover,
+.reset-btn:hover,
+.info-btn:hover {
+  background: #3c4d58;
+}
+/* === Custom Cursor === */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: background 0.3s, border 0.3s, transform 0.1s ease;
+  mix-blend-mode: difference;
+}
+
+/* Light Theme Cursor */
+[data-theme="light"] .custom-cursor {
+  border: 2px solid #06141b;
+  background: transparent;
+  mix-blend-mode: normal;
+}
+
+/* Dark Theme Cursor */
+[data-theme="dark"] .custom-cursor {
+  background: #9ba8ab;
+  border: none;
+  box-shadow: 0 0 6px 2px #9ba8ab;
+  mix-blend-mode: lighten;
+}
+
+/* Click shrink effect */
+.custom-cursor.clicking {
+  transform: translate(-50%, -50%) scale(0.7);
+}
+
+/* Restore default pointer for inputs/buttons */
+button, a, input, textarea, select {
+  cursor: pointer !important;
+}
+/* === Custom Cursor Styles === */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: background 0.3s, border 0.3s, transform 0.1s ease;
+}
+
+/* Light Theme: Circle */
+[data-theme="light"] .custom-cursor {
+  border: 2px solid #06141b;
+  background: transparent;
+}
+
+/* Dark Theme: Glowing Dot */
+[data-theme="dark"] .custom-cursor {
+  background: #9ba8ab;
+  border: none;
+  box-shadow: 0 0 6px 2px #9ba8ab;
+}
+
+/* Click Effect */
+.custom-cursor.clicking {
+  transform: translate(-50%, -50%) scale(0.8);
+}
+/* === Enhanced Cursor Effects === */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.15s ease, background 0.3s, opacity 0.3s;
+  mix-blend-mode: difference;
+  backdrop-filter: blur(4px);
+}
+
+[data-theme="light"] .custom-cursor {
+  border: 2px solid #06141b;
+  background: rgba(6, 20, 27, 0.05);
+}
+
+[data-theme="dark"] .custom-cursor {
+  background: #9ba8ab;
+  border: none;
+  box-shadow: 0 0 8px #9ba8ab88;
+}
+
+.custom-cursor.clicking {
+  animation: ripple 0.4s ease-out;
+  transform: translate(-50%, -50%) scale(0.8);
+}
+
+.custom-cursor.hovering {
+  transform: translate(-50%, -50%) scale(1.6);
+  background-color: rgba(100, 150, 200, 0.2);
+  box-shadow: 0 0 12px 4px rgba(100, 150, 200, 0.25);
+}
+
+@keyframes ripple {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
   }
+  100% {
+    transform: translate(-50%, -50%) scale(2.5);
+    opacity: 0;
+  }
+}
+body, html, * {
+  cursor: none !important;
+}
+
+input, textarea, select {
+  cursor: text !important;
+}
+
+button, a {
+  cursor: none !important;
+}
+/* Hide the default cursor everywhere */
+body, html, * {
+  cursor: none !important;
+}
+
+/* Also remove pointer from buttons/links explicitly */
+button, a, input, textarea, select {
+  cursor: none !important;
+}
+.follow-up-buttons {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.follow-up-btn {
+  padding: 4px 8px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid var(--highlight);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.follow-up-btn:hover {
+  background: var(--highlight);
+  color: white;
+}
+/* Custom scrollbar for Webkit */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--input-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--highlight);
+}
+
+
+
+/* === Preloader ===
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.logo-loader {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1rem;
+  animation: floatIn 0.6s ease forwards;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 5px solid var(--highlight);
+  border-top: 5px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+} */
+
+/* @keyframes spin { */
+  /* 0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); } */
+/* .preloader {
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.4s ease;
+}
+
+.preloader-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #eee;
+  border-top: 5px solid var(--highlight);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+} */
+
+/* @keyframes spin {
   to {
     transform: rotate(360deg);
   }
 }
+.preloader {
+  height: 100vh;
+  background: #fefefe;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.preloader-logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #999;
+  border-top: 4px solid #000;
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+ */

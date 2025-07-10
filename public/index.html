@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/2.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -24,9 +24,16 @@
       work correctly both with client-side routing and a non-root public URL.
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
-    <title>React App</title>
+      <!-- Add this inside the <head> tag of public/index.html -->
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet" />
+
+    <title>IE-Fixxy</title>
   </head>
   <body>
+    <div id="preloader">
+  <img src="D:\IE navi Doubt Solver\dsa-ai-ui\public\2.png" alt="IE Navi Logo" class="logo-loader" />
+  <div class="spinner"></div>
+</div>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <!--
@@ -39,5 +46,24 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+  <script>
+  window.addEventListener("load", () => {
+    const preloader = document.getElementById("preloader");
+    if (preloader) preloader.style.display = "none";
+  });
+</script>
+
+<!-- <div id="preloader">
+  <img src="/path-to-your-logo.png" alt="IE Navi Logo" class="logo-loader" />
+  <div class="spinner"></div>
+</div> -->
+<script>
+  window.addEventListener("load", () => {
+    const preloader = document.getElementById("preloader");
+    if (preloader) preloader.style.display = "none";
+  });
+</script>
+
+
   </body>
 </html>
