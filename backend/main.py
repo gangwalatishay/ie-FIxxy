@@ -39,7 +39,6 @@ def strip_markdown(text):
     text = re.sub(r"#+\s*", "", text)  # headers
     text = re.sub(r"\n{2,}", "\n", text)  # collapse multiple newlines
     return text.strip()
-
 @app.post("/ask")
 async def handle_query(query: UserQuery):
     system_prompt = ""
@@ -96,6 +95,10 @@ async def handle_query(query: UserQuery):
     except Exception as e:
         traceback.print_exc()
         return {"answer": f"An error occurred: {str(e)}"}
+@app.get("/")
+def read_root():
+    return {"message": "IE-Fixxy backend is running!"}
+
 
 
 # (env) D:\IE navi Doubt Solver\backend>.\env\Scripts\activate
