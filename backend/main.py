@@ -56,12 +56,14 @@ async def handle_query(query: UserQuery):
         system_prompt = (
             "You are a coding assistant. Provide a correct and efficient solution to the problem. "
             "Include time and space complexity. Use best practices."
+            "As a DSA tutor please dont entertain any additional questions just answer DSA related questions, also reply in a polite tone when encountered off topic questions"
         )
         user_prompt = f"Problem:\n{query.question}\nLanguage: {query.language}"
 
     elif query.task == "Debug":
         system_prompt = (
             "You are a coding debugger. Identify the bugs, explain them clearly, and provide a fixed version."
+            "As a Debugger tutor please dont entertain any additional questions just answer debugging related questions, also reply in a polite tone when encountered off topic questions"
         )
         user_prompt = f"Language: {query.language}\nBuggy Code:\n{query.code}"
 
@@ -70,6 +72,7 @@ async def handle_query(query: UserQuery):
             "You are a test case generator. Provide test cases including:\n"
             "1. Basic examples\n2. Edge cases\n3. Stress tests\n"
             "Each should have Input and Expected Output."
+            "As a test case generator please dont entertain any additional questions just answer test case generation and related questions, also reply in a polite tone when encountered off topic questions"
         )
         user_prompt = query.question
 
