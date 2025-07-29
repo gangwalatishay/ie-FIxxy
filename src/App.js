@@ -1,18 +1,17 @@
+// app.js
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import "./App.css";
 
-const ravi251 = ["Two Sum", "Reverse Linked List", "Binary Search"];
-const ravi400 = ["Longest Palindromic Substring", "Merge Intervals"];
-const ravi111 = ["N-Queens Problem", "Maximum Subarray"];
+const ravi400 = ["Longest Palindromic Substring", "Merge Intervals","Add to Array-Form of Integer","Third Maximum Number","Check if Array Is Sorted and Rotated","Majority Element","Matrix Similarity After Cyclic Shifts","Reorder an array according to given indexes","Replace Elements with Greatest Element on Right Side","Find the Value of the Partition","Rotate Array","Multiply Matrices","Longest Mountain in Array","Minimum Adjacent Swaps to Make a Valid Array","Number of Adjacent Elements With the Same Color","Minimize Length of Array Using Operations","Set Matrix Zeroes","First Missing Positive","Minimize String Length","Check if One String Swap Can Make Strings Equal","Maximum Nesting Depth of the Parentheses","Find smallest number formed by inserting given digit","String Compression","Encode and Decode Strings","Lexicographically Smallest String After Substring Operation","Minimum Additions to Make Valid String","Largest Palindromic Number","Find Beautiful Indices in the Given Array II","Guess the Word","Text Justification","Find the Index of the First Occurrence in a String","Repeated String Match","Shortest Palindrome","Two Sum","Intersection of Two Arrays II","First Unique Character in a String","Design HashMap","Roman to Integer","Count Triplets That Can Form Two Arrays of Equal XOR","Unique Length-3 Palindromic Subsequences","Find the Number of Distinct Colors Among the Balls","Insert Delete GetRandom O(1)","Minimum Number of Pushes to Type Word II","Max Sum of a Pair With Equal Sum of Digits","Check If Array Pairs Are Divisible by k","Pairs of Songs With Total Durations Divisible by 60","Design a Number Container System","Sum of Distances","Sum of Matrix After Queries","Split Array into Consecutive Subsequences","Group Anagrams","Longest Consecutive Sequence","Count Array Pairs Divisible by K","Happy Number","Pascal's Triangle","Excel Sheet Column Title","Can Make Arithmetic Progression From Sequence","Maximum GCD Pair","Nth catalan number","Minimum Operations to Make Array Equal","Minimum Moves to Equal Array Elements","Rotate Image","Multiply Strings","Detect Squares","Minimum Number of Operations to Make All Array Elements Equal to 1","Count Good Numbers","Check if Point Is Reachable","Count All Valid Pickup and Delivery Options","Maximum Score After Splitting a String","Product of Array Except Self","Range Sum Query 2D - Immutable","Minimum Penalty for a Shop","Minimum Number of Operations to Move All Balls to Each Box","Movement of Robots","Grid Game","Number of Submatrices That Sum to Target"];
 
 const languageOptions = ["C++", "Python", "Java", "JavaScript"];
 const tasks = ["Explain", "Debug", "TestCases"];
 
 function App() {
   const [theme, setTheme] = useState("light");
-  const [selectedSet, setSelectedSet] = useState("Ravi 251");
+  const [selectedSet, setSelectedSet] = useState("Ravi 400");
   const [searchTerm, setSearchTerm] = useState("");
-  const [questions, setQuestions] = useState(ravi251);
+  const [questions, setQuestions] = useState(ravi400);
   const [selectedQuestion, setSelectedQuestion] = useState({ Explain: "", Debug: "", TestCases: "" });
   const [language, setLanguage] = useState("Python");
   const [task, setTask] = useState("Explain");
@@ -65,9 +64,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (selectedSet === "Ravi 251") setQuestions(ravi251);
-    else if (selectedSet === "Ravi 400") setQuestions(ravi400);
-    else setQuestions(ravi111);
+    if (selectedSet === "Ravi 400") setQuestions(ravi400);
+
     setSearchTerm("");
   }, [selectedSet]);
 
@@ -147,7 +145,7 @@ function App() {
           <>
             <h2>Ravi DSA Sheets</h2>
             <div className="ravi-sets">
-              {["Ravi 251", "Ravi 400", "Ravi 111"].map((set) => (
+              {[ "Ravi 400"].map((set) => (
                 <button
                   key={set}
                   className={`ravi-set-btn ${selectedSet === set ? "selected" : ""}`}
